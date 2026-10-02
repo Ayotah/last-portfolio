@@ -73,13 +73,19 @@ footer{text-align:center;padding:30px 16px;color:var(--mute);font-size:.85rem;bo
 .reveal.in{opacity:1;transform:none}
 
 @media (max-width:760px){
+  .nav{background:rgba(16,48,56,.98)}
   .burger{display:block}
-  nav{position:fixed;top:73px;left:0;right:0;flex-direction:column;gap:0;background:rgba(7,7,13,.97);border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .3s}
+  nav{position:fixed;top:73px;left:0;right:0;flex-direction:column;gap:0;background:rgba(10,31,37,.99);border-bottom:1px solid var(--line);max-height:0;overflow:hidden;transition:max-height .3s}
   nav.open{max-height:360px}
   nav a{padding:16px 24px;font-size:1rem;border-top:1px solid var(--line)}
+  .hero{padding-top:125px}
   .cta .btn{flex:1 1 100%}
   .form .btn{justify-self:stretch}
   .responsibilities{grid-template-columns:1fr}
+  .timeline{padding-left:16px}
+  .timeline li{padding-left:16px;overflow-wrap:anywhere}
+  .timeline li::before{left:-24px}
+  .timeline small{display:block}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
