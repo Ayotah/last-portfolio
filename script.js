@@ -4,28 +4,28 @@ const PROFILE = {
   role: "Web Designer & Developer",
   location: "Yaoundé, Cameroon | +237 652 352 448",
   bio: "Innovative web designer and developer with strong problem-solving skills and a creative, practical approach to complex challenges. I bring clear communication to the full web development process, from building websites to managing content, with a focus on performance and user experience.",
-    skills: ["HTML", "CSS", "JavaScript", "Java", "Python", "Debugging", "Software Frameworks", "UX & UI Design", "Problem Solving", "Creativity", "Attention to Detail", "Teamwork"],
-    responsibilities: [
-      "Write well-designed, testable, efficient code using software development best practices.",
-      "Build website layouts and user interfaces with standard HTML and CSS practices.",
-      "Integrate data from back-end services and databases.",
-      "Gather and refine specifications and requirements based on technical needs.",
-      "Create and maintain software documentation.",
-      "Maintain, expand, and scale websites; keep up with emerging technologies and industry trends.",
-      "Work with web designers to match visual design intent."
-    ],
+  skills: ["HTML", "CSS", "JavaScript", "Java", "Python", "Debugging", "Software Frameworks", "UX & UI Design", "Problem Solving", "Creativity", "Attention to Detail", "Teamwork"],
+  responsibilities: [
+    "Write well-designed, testable, efficient code using software development best practices.",
+    "Build website layouts and user interfaces with standard HTML and CSS practices.",
+    "Integrate data from back-end services and databases.",
+    "Gather and refine specifications and requirements based on technical needs.",
+    "Create and maintain software documentation.",
+    "Maintain, expand, and scale websites; keep up with emerging technologies and industry trends.",
+    "Work with web designers to match visual design intent."
+  ],
   timeline: [
     ["2026", "Higher National Diploma (HND)", "Awarded in 2026."],
     ["2024 - Present", "University Studies", "Fobang Institute."],
-      ["2022 - Present", "Computer Science Teacher", "Power of Grace Evening School, Superette, Yaoundé. Teach JavaScript and computer science, prepare lesson plans, tutor students, and keep course content current."],
+    ["2022 - Present", "Computer Science Teacher", "Power of Grace Evening School, Superette, Yaoundé. Teach JavaScript and computer science, prepare lesson plans, tutor students, and keep course content current."],
     ["2021 - 2022", "Advanced Level Certificate", "LEADEX Evening School."]
   ],
-    languages: ["English - Excellent", "French - Excellent", "Pidgin - Excellent"],
-    hobbies: ["Reading inspirational books", "Listening to music"],
-    email: "ayotahendali16@gmail.com",
-    phone: "+237652352448",
-    declaration: "I certify that the information above is true and correct to the best of my knowledge and ability. If given the opportunity to serve, I will carry out assigned duties to your satisfaction.",
-    links: [["Email", "mailto:ayotahendali16@gmail.com"], ["Call", "tel:+237652352448"]]
+  languages: ["English - Excellent", "French - Excellent", "Pidgin - Excellent"],
+  hobbies: ["Reading inspirational books", "Listening to music"],
+  email: "ayotahendali16@gmail.com",
+  phone: "+237652352448",
+  declaration: "I certify that the information above is true and correct to the best of my knowledge and ability. If given the opportunity to serve, I will carry out assigned duties to your satisfaction.",
+  links: [["Email", "mailto:ayotahendali16@gmail.com"], ["Call", "tel:+237652352448"]]
 };
 
 /* ===== RENDER ===== */
@@ -52,15 +52,26 @@ $("form").addEventListener("submit", e => {
   location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent("Portfolio message from " + f.get("n"))}&body=${encodeURIComponent(f.get("m") + "\n\n" + f.get("e"))}`;
 });
 
-/* mobile menu */
+/* mobile menu (matches the 980px breakpoint in style.css) */
 const burger = $("burger"), menu = $("menu");
 const closeMenu = () => { menu.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); };
-burger.addEventListener("click", () => burger.setAttribute("aria-expanded", menu.classList.toggle("open")));
+burger.addEventListener("click", e => {
+  e.stopPropagation();
+  burger.setAttribute("aria-expanded", menu.classList.toggle("open"));
+});
 menu.addEventListener("click", closeMenu);
+document.addEventListener("click", e => { if (!menu.contains(e.target)) closeMenu(); });
+addEventListener("keydown", e => { if (e.key === "Escape") { closeMenu(); burger.focus(); } });
+matchMedia("(min-width:981px)").addEventListener("change", e => e.matches && closeMenu());
 
-/* reveal on scroll */
-const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: .12 });
-document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+/* reveal on scroll (lower threshold so tall sections on phones still appear) */
+const revealEls = document.querySelectorAll(".reveal");
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver(es => es.forEach(e => e.isIntersecting && (e.target.classList.add("in"), io.unobserve(e.target))), { threshold: .05 });
+  revealEls.forEach(el => io.observe(el));
+} else {
+  revealEls.forEach(el => el.classList.add("in"));
+}
 
 /* 3D tilt on cards (mouse devices only) */
 if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
@@ -78,37 +89,55 @@ if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
   const canvas = $("bg");
   if (typeof THREE === "undefined") return;
   const reduce = matchMedia("(prefers-reduced-motion:reduce)").matches;
-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const small = Math.min(innerWidth, innerHeight) < 600;      // phones
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: !small, alpha: true, powerPreference: "low-power" });
+  } catch (err) { return; }                                    // no WebGL: page still works without the background
+  renderer.setPixelRatio(Math.min(devicePixelRatio, small ? 1.5 : 2));
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(60, 1, .1, 100);
   camera.position.z = 8;
 
-  const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.7, .5, 160, 20), new THREE.MeshBasicMaterial({ color: 0x7c5cff, wireframe: true, transparent: true, opacity: .55 }));
+  const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.7, .5, small ? 100 : 160, small ? 14 : 20), new THREE.MeshBasicMaterial({ color: 0x7c5cff, wireframe: true, transparent: true, opacity: .55 }));
   const ico = new THREE.Mesh(new THREE.IcosahedronGeometry(.9, 1), new THREE.MeshBasicMaterial({ color: 0x22d3ee, wireframe: true, transparent: true, opacity: .7 }));
   const ring = new THREE.Mesh(new THREE.TorusGeometry(3.4, .015, 8, 120), new THREE.MeshBasicMaterial({ color: 0x22d3ee, transparent: true, opacity: .5 }));
   ring.rotation.x = 1.2;
   const group = new THREE.Group(); group.add(knot, ico, ring); scene.add(group);
 
-  const N = 700, pos = new Float32Array(N * 3);
+  const N = small ? 350 : 700, pos = new Float32Array(N * 3);
   for (let i = 0; i < N * 3; i++) pos[i] = (Math.random() - .5) * 40;
   const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
   const stars = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xffffff, size: .05, transparent: true, opacity: .7 }));
   scene.add(stars);
 
-  let mx = 0, my = 0, sy = 0, narrow = false;
-  function resize() {
+  let mx = 0, my = 0, sy = 0, narrow = false, lastW = 0, lastH = 0, ready = false, queued = false;
+  const clock = new THREE.Clock();
+
+  function resize(force) {
     const w = innerWidth, h = innerHeight;
+    // Mobile browsers fire "resize" as the address bar hides/shows; ignore small height-only changes.
+    if (!force && w === lastW && Math.abs(h - lastH) < 150) return;
+    lastW = w; lastH = h;
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
-    narrow = w < 760;
-    group.scale.setScalar(narrow ? .62 : 1);
+    narrow = w < 900 || w / h < 1;                             // phones, tablets and portrait screens
+    group.scale.setScalar(w < 760 ? .62 : narrow ? .8 : 1);
+    if (ready && reduce) frame();                              // resizing clears the canvas, so redraw
   }
-  addEventListener("resize", resize); resize();
-  addEventListener("pointermove", e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; });
+  addEventListener("resize", () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; resize(); });
+  });
+  resize(true);
+
+  addEventListener("pointermove", e => {
+    if (e.pointerType !== "mouse") return;                     // touch drags shouldn't move the camera
+    mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+  });
   addEventListener("scroll", () => sy = scrollY, { passive: true });
 
-  const clock = new THREE.Clock();
   function frame() {
     const t = reduce ? 0 : clock.getElapsedTime();
     const prog = sy / Math.max(1, document.body.scrollHeight - innerHeight);
@@ -123,6 +152,7 @@ if (matchMedia("(hover:hover) and (pointer:fine)").matches) {
     renderer.render(scene, camera);
     if (!reduce) requestAnimationFrame(frame);
   }
+  ready = true;
   frame();
   if (reduce) addEventListener("scroll", frame, { passive: true });
 })();
