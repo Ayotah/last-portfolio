@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ayotah Ingiambi Endali - Web Designer &amp; Developer</title>
+<meta name="description" content="Portfolio and CV of Ayotah Ingiambi Endali, web designer, developer, and computer science teacher in Yaounde, Cameroon.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<header class="nav">
+  <a class="logo" href="#home" id="logo">Name</a>
+  <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span></button>
+  <nav id="menu">
+    <a href="#about">About</a><a href="#skills">Skills</a><a href="#responsibilities">Responsibilities</a>
+    <a href="#experience">Experience &amp; Education</a><a href="#personal">Personal</a><a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <section id="home" class="hero">
+    <p class="eyebrow" id="hello">Hello, I'm</p>
+    <h1 id="name">Ayotah Ingiambi Endali</h1>
+    <p class="role" id="role">Your Title</p>
+    <p class="location" id="location"></p>
+    <div class="cta">
+      <a class="btn primary" href="#experience">View my experience</a>
+      <a class="btn" href="#contact">Contact me</a>
+    </div>
+    <span class="scroll">Scroll</span>
+  </section>
+
+  <section id="about" class="sec reveal">
+    <h2>About</h2>
+    <p class="lead" id="bio"></p>
+  </section>
+
+  <section id="skills" class="sec reveal">
+    <h2>Skills</h2>
+    <div class="chips" id="skillList"></div>
+  </section>
+
+  <section id="responsibilities" class="sec reveal">
+    <h2>Key Responsibilities</h2>
+    <ul class="responsibilities" id="responsibilityList"></ul>
+  </section>
+
+  <section id="experience" class="sec reveal">
+    <h2>Experience &amp; Education</h2>
+    <ol class="timeline" id="timeline"></ol>
+  </section>
+
+  <section id="personal" class="sec reveal">
+    <h2>Languages &amp; Interests</h2>
+    <h3 class="subheading">Languages</h3>
+    <div class="chips" id="languageList"></div>
+    <h3 class="subheading">Hobbies</h3>
+    <div class="chips" id="hobbyList"></div>
+  </section>
+
+  <section id="contact" class="sec reveal">
+    <h2>Let's work together</h2>
+    <p class="contact-details" id="contactDetails"></p>
+    <form id="form" class="form">
+      <input name="n" placeholder="Your name" required>
+      <input name="e" type="email" placeholder="Your email" required>
+      <textarea name="m" rows="4" placeholder="Your message" required></textarea>
+      <button class="btn primary" type="submit">Send message</button>
+    </form>
+    <div class="links" id="links"></div>
+    <h3 class="subheading declaration-title">Declaration</h3>
+    <p class="declaration" id="declaration"></p>
+  </section>
+</main>
+
+<footer>© <span id="year"></span> <span id="foot"></span></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
